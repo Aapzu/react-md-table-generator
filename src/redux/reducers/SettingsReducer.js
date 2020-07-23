@@ -1,7 +1,6 @@
 import { Map } from "immutable";
 
 const initialState = Map({
-
   fullscreen      : false,
   theme           : 'light',
   importModalOpen : false,

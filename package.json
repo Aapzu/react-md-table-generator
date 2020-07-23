@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
     "classnames": "^2.2.6",
     "immutable": "^4.0.0-rc.12",
     "node-sass": "^4.13.0",
@@ -14,7 +15,9 @@
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.0",
     "react-spring": "^8.0.27",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-persist": "^5.10.0",
+    "redux-persist-transform-immutable": "^5.0.0"
   },
   "scripts": {
     "start": "PORT=3003 react-scripts start",
