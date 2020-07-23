@@ -32,13 +32,6 @@ export default function Cell({ rowIndex, columnIndex }) {
   }
 
   const handleKeyPress = e => {
-
-    // up and down should move between lines in one cell, so only
-    // allow movement between cells if the CTRL or CMD key is pressed:
-    if (!e.ctrlKey && !e.metaKey) {
-      return
-    }
-
     switch(e.key) {
       case 'ArrowDown':
         moveActiveCell('down');
@@ -46,6 +39,13 @@ export default function Cell({ rowIndex, columnIndex }) {
 
       case 'ArrowUp':
         moveActiveCell('up');
+        break;
+
+      case 'Enter':
+        if (!e.shiftKey) {
+          e.preventDefault();
+          moveActiveCell('down');
+        }
         break;
 
       default:

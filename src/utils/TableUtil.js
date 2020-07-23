@@ -101,6 +101,22 @@ export function calculateMaxLength(immutableRows, columnIndex) {
   return maxColumnLength;
 }
 
+export function calculateMaxLineLength(immutableRows, columnIndex) {
+
+  let maxColumnLength = 0;
+
+  immutableRows.forEach(row => {
+    const cells = (row.get(columnIndex) || '').split("<br>");
+
+    cells.forEach(cell => {
+      maxColumnLength = Math.max(cell.length, maxColumnLength);
+    })
+
+  });
+
+  return maxColumnLength;
+}
+
 export function unescapeMarkdown(markdown) {
   let string = markdown || '';
   

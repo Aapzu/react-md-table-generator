@@ -20,8 +20,14 @@ const initialState = Map({
   // Max string length per column index:
   maxColumnLength : List(),
 
+  // Max string length (splitted by newline) per column index:
+  maxColumnLineLength : List(),
+
   // Alignment for columns (null, 'left', 'center', 'right'):
   columnsAlignment: List(),
+
+  // Whether to render the table with multimd syntax or not
+  multiMd: true,
 
   // List of rows (column sized):
   rows: List([
@@ -63,7 +69,9 @@ export default function table(state = initialState, action) {
 
         state.setIn(['rows', rowIndex, columnIndex], value);
         const maxLength = TableUtil.calculateMaxLength(state.get('rows'), columnIndex);
+        const maxLineLength = TableUtil.calculateMaxLineLength(state.get('rows'), columnIndex);
         state.setIn(['maxColumnLength', columnIndex], maxLength);
+        state.setIn(['maxColumnLineLength', columnIndex], maxLineLength);
       });
     }
 
@@ -110,12 +118,14 @@ export default function table(state = initialState, action) {
       let rows = state.get('rows');
       rows = rows.map(row => row.insert(columnIndex, ''));
       
-      const maxColumnLength = state.get('maxColumnLength').insert(columnIndex, TableUtil.calculateMaxLength(rows), columnIndex);
-      
+      const maxColumnLength = state.get('maxColumnLength').insert(columnIndex, TableUtil.calculateMaxLength(rows, columnIndex));
+      const maxColumnLineLength = state.get('maxColumnLineLength').insert(columnIndex, TableUtil.calculateMaxLineLength(rows, columnIndex));
+
       return state.merge({
         columnCount,
         rows,
         maxColumnLength,
+        maxColumnLineLength,
       });
     }
 
@@ -150,6 +160,11 @@ export default function table(state = initialState, action) {
     case 'TABLE_TOGGLE_ADJUST_WIDTH': {
       const adjustWidth = state.get('adjustWidth');
       return state.set('adjustWidth', !adjustWidth);
+    }
+
+    case 'TABLE_TOGGLE_MULTI_MD': {
+      const multiMd = state.get('multiMd');
+      return state.set('multiMd', !multiMd);
     }
 
     case 'TABLE_CLEAR_ACTIVE_CELL':

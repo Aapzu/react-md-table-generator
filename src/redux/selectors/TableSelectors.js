@@ -8,6 +8,15 @@ export const getCellValue = (rowIndex, columnIndex, options) => function(state) 
   return cellValueFromState(state, rowIndex, columnIndex, options);
 };
 
+export const getRowValues = (rowIndex, options) => function(state) {
+  return state.table.get(TABLE.State.rows).get(rowIndex).map(value => {
+    if (options.removeLastBR && value && value.endsWith('<br>')) {
+      return value.slice(0, -4);
+    }
+    return value
+  });
+}
+
 function cellValueFromState(state, rowIndex, columnIndex, options = {}) {
   let value = state.table.getIn([ TABLE.State.rows, rowIndex, columnIndex ]);
 
@@ -16,6 +25,10 @@ function cellValueFromState(state, rowIndex, columnIndex, options = {}) {
   }
 
   return value;
+}
+
+export const isMultiMd = () => function(state) {
+  return state.table.get("multiMd")
 }
 
 export const getRowCount = () => function(state) {
@@ -59,6 +72,10 @@ export const getAdjustWidth = () => function(state) {
 
 export const getMaxColumnLength = rowIndex => function(state) {
   return state.table.getIn([ TABLE.State.maxColumnLength, rowIndex ]) || 0;
+};
+
+export const getMaxColumnLineLength = rowIndex => function(state) {
+  return state.table.getIn([ TABLE.State.maxColumnLineLength, rowIndex ]) || 0;
 };
 
 export const isExtraCell = (rowIndex, columnIndex = undefined) => function(state) {

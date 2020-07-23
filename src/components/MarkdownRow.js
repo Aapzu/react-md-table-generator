@@ -5,15 +5,40 @@ import MarkdownCell from './MarkdownCell';
 
 export default function MarkdownRow({ rowIndex }) {
 
-  const columnCount = useSelector(TableSelectors.getColumnCount());
-  
-  const columns = Array(columnCount).fill().map((_, i) => (
-    <MarkdownCell key={i} rowIndex={rowIndex} columnIndex={i} />
-  ));
+  const isMultiMd = useSelector(TableSelectors.isMultiMd())
 
-  return (
+  const columnCount = useSelector(TableSelectors.getColumnCount());
+
+  const rowValues = useSelector(TableSelectors.getRowValues(rowIndex, { removeLastBR: true }))
+
+  const grid = Array(columnCount).fill().map((_, i) => {
+    const value = rowValues.get(i)
+    if (isMultiMd) {
+      const vals = (value || "").split("<br>")
+      return vals.map((_, j) => {
+        const lineValue = vals[j]
+        return (
+          <MarkdownCell key={i} value={lineValue} columnIndex={i} />
+        )
+      })
+    } else {
+      return [
+        <MarkdownCell key={i} value={value} columnIndex={i} />
+      ]
+    }
+  });
+
+  const maxRows = Math.max(...grid.map(values => values.length))
+
+  return Array(maxRows).fill().map((_, i) => (
     <div>
-      { columns }
+      { Array(columnCount).fill().map((_, j) => {
+        return (
+          grid[j][i] || <MarkdownCell key={"" + i + j} value={""} columnIndex={j} />
+        )
+      })}
+      {' '}|
+      {i < maxRows - 1 && " \\"}
     </div>
-  )
+  ))
 };

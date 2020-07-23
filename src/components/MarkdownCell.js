@@ -2,27 +2,29 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import * as TableSelectors from '../redux/selectors/TableSelectors';
 
-export default function MarkdownCell({ rowIndex, columnIndex }) {
+export default function MarkdownCell({ value, columnIndex }) {
 
-  const value           = useSelector(TableSelectors.getCellValue(rowIndex, columnIndex, { removeLastBR: true }));
-  const lastColumn      = useSelector(TableSelectors.isLastColumn(columnIndex));
   const adjustWidth     = useSelector(TableSelectors.getAdjustWidth());
-  let   maxColumnLength = useSelector(TableSelectors.getMaxColumnLength(columnIndex));
+  const isMultiMd       = useSelector(TableSelectors.isMultiMd())
+  const maxColumnLength = useSelector(TableSelectors.getMaxColumnLength(columnIndex));
+  const maxColumnLineLength = useSelector(TableSelectors.getMaxColumnLineLength(columnIndex))
 
-  let extraSpaces = '';
+  let extraSpaces = ' ';
 
   if (adjustWidth) {
 
-    maxColumnLength = Math.max(maxColumnLength, 3);
+    let length = (isMultiMd && maxColumnLineLength) || maxColumnLength
+
+    length = Math.max(length, 3);
 
     const cellLength = (value && value.length) || 0;
 
-    if (maxColumnLength - cellLength > 0) {
-      extraSpaces = ' '.repeat(maxColumnLength - cellLength);
+    if (length - cellLength > 0) {
+      extraSpaces += ' '.repeat(length - cellLength);
     }
   }
 
   return (
-    <span>| {value}{extraSpaces} { lastColumn && '|'}</span>
+    <span>| {value}{extraSpaces}</span>
   );
 }

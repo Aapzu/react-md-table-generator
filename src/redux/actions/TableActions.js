@@ -68,3 +68,7 @@ export const insertColumn = columnIndex => ({
   type    : 'TABLE_INSERT_COLUMN',
   payload : { columnIndex },
 });
+
+export const toggleMultiMd = columnIndex => ({
+  type    : 'TABLE_TOGGLE_MULTI_MD',
+});

@@ -10,11 +10,11 @@ import Table from "../components/Table";
 import MarkdownTable from "../components/MarkdownTable";
 
 import '../styles/MainEditor.scss';
-import CellValueInput from '../components/CellValueInput';
 import AlignButton from '../components/toolbar/AlignButton';
 import AdjustWidthButton from '../components/toolbar/AdjustWidthButton';
 import ToggleFullscreenButton from '../components/toolbar/ToggleFullscreenButton';
 import ImportMarkdownModal from './ImportMarkdownModal';
+import ToggleMultiMdButton from "../components/toolbar/ToggleMultiMdButton"
 
 export default function MainEditor() {
 
@@ -31,20 +31,6 @@ export default function MainEditor() {
     }
   }
 
-  const AddCode = e => {
-    console.log(window.getSelection());
-
-    const selection = window.getSelection();
-
-    console.log(selection.anchorNode.parentNode.className);
-    
-    if (selection.anchorNode.parentNode.className === 'cell-value') {
-      console.log('CELL!');
-
-      dispatch(TableActions.formatActiveCell(selection.anchorOffset, selection.focusOffset, 'code'));
-    }
-  }
-
   const isFullscreen = useSelector(SettingsSelectors.isFullscreen());
 
   return (
@@ -53,13 +39,11 @@ export default function MainEditor() {
       <div className='toolbar'>
         
         <div className='main-buttons'>
-          <CellValueInput />
-
-          <button onClick={AddCode}>Code</button>
-
           <AlignButton alignment='left' />
           <AlignButton alignment='center' />
           <AlignButton alignment='right' />
+
+          <ToggleMultiMdButton />
 
           <AdjustWidthButton />
         </div>
