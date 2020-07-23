@@ -21,7 +21,6 @@ export default function Cell({ rowIndex, columnIndex }) {
   const editCell         = e => dispatch(TableActions.editCell(rowIndex, columnIndex, TableUtil.htmlToMarkdown(e.target.value), true));
   const moveActiveCell  = direction => dispatch(TableActions.moveActiveCell(direction));
   const setActiveCell   = () => dispatch(TableActions.setActiveCell(rowIndex, columnIndex));
-  const clearEditingCell = () => dispatch(TableActions.setActiveCell());
   const insertRow        = () => dispatch(TableActions.insertRow(rowIndex));
   const insertColumn     = () => dispatch(TableActions.insertColumn(columnIndex));
 
